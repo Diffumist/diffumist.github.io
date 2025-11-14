@@ -1,0 +1,38 @@
+---
+layout: layouts/base.vto
+title: Posts
+description: Posts
+permalink: /posts/
+---
+<main>
+  <section>
+    <h1 class="terminal-prompt">Posts</h1>
+    {{ set posts = search.pages("type=post") }}
+    {{ if posts && posts.length }}
+    {{
+      set orderedPosts = [...(posts ?? [])].sort((a, b) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      )
+    }}
+    <ul class="post-list">
+      {{ for post of orderedPosts }}
+        {{
+          set yearMonth = (() => {
+            const dateObj = new Date(post.date ?? Date.now());
+            const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+            return `${dateObj.getFullYear()}年${month}月`;
+          })();
+        }}
+        <li class="post-list-item">
+          <span class="post-date">{{ yearMonth }}</span>
+          <a href="{{ post.url }}">
+            {{ post.title }}
+          </a>
+        </li>
+      {{ /for }}
+    </ul>
+    {{ else }}
+    <p>None</p>
+    {{ /if }}
+  </section>
+</main>

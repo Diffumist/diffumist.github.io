@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "dev": "deno run --config=deno.json -A https://deno.land/x/lume@v2.2.0/cli.ts -s",
+    "build": "deno run --config=deno.json -A https://deno.land/x/lume@v2.2.0/cli.ts"
+  },
+  "imports": {
+    "lume/": "https://deno.land/x/lume@v2.2.0/"
+  }
+}

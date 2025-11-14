@@ -1,3 +1,6 @@
 node_modules/
-.cache/
-public
+_site/
+.serena/
+*.log
+.DS_Store
+.env

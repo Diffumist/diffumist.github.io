@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="{{ description ?? site.description }}" />
+  <title>{{ title ?? site.title }}</title>
+  <link rel="stylesheet" href="/vendor/terminal.min.css" />
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="{{ site.title }}" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title="{{ site.title }} RSS"
+    href="{{ site.url }}/feed.xml"
+  />
+  <style>
+    :root {
+      --background-color: {{ site.theme.background }};
+      --font-color: {{ site.theme.text }};
+      --invert-font-color: {{ site.theme.invertText }};
+      --secondary-color: {{ site.theme.secondary }};
+      --primary-color: {{ site.theme.primary }};
+      --error-color: {{ site.theme.error }};
+      --code-bg-color: {{ site.theme.codeBackground }};
+      --block-background-color: {{ site.theme.blockBackground }};
+    }
+  </style>
+</head>
+<body class="terminal">
+  <div class="container">
+    <nav class="terminal-nav">
+      <header class="terminal-logo">
+        <div class="logo terminal-prompt">
+          <a href="/">{{ site.title }}</a>
+        </div>
+      </header>
+      <div class="terminal-menu main-menu">
+        <ul>
+          <li><a href="/posts/">Post</a></li>
+          <li><a href="/about/">About</a></li>
+        </ul>
+      </div>
+    </nav>
+    <hr>
+    {{ content |> safe }}
+  </div>
+</body>
+</html>
