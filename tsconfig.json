@@ -1,22 +1,11 @@
 {
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "public/pagefind"],
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "target": "es6",
-    "jsx": "react",
-    "lib": ["es6", "dom"],
-    "sourceMap": true,
-    "rootDir": ".",
-    "noUnusedLocals": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "strictNullChecks": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"],
+      "@/astro-paper.config": ["./astro-paper.config"]
     }
-  },
-  "include": ["./src/**/*"]
+  }
 }

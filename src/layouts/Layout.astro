@@ -1,0 +1,146 @@
+---
+import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getAssetPath } from "@/utils/withBase";
+import config from "@/config";
+import "@/styles/global.css";
+
+type Props = {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  canonicalURL?: string;
+};
+
+const { site } = config;
+
+const {
+  title = site.title,
+  description = site.description,
+  ogImage,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+} = Astro.props;
+
+const rssHref = getRelativeLocaleUrl(
+  Astro.currentLocale ?? config.site.lang,
+  "rss.xml"
+);
+---
+
+<!doctype html>
+<html
+  dir={site.dir ?? "ltr"}
+  lang={Astro.currentLocale ?? site.lang}
+  class="overflow-y-scroll scroll-smooth"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href={getAssetPath("favicon.ico")} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Font -->
+    <Font
+      cssVariable="--font-google-sans-code"
+      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
+    />
+
+    <!-- Primary meta -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content={site.author} />
+    <link rel="sitemap" href={getAssetPath("sitemap-index.xml")} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+
+    <!-- Twitter / X -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+
+    <!-- RSS autodiscovery -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={site.title}
+      href={new URL(rssHref, Astro.site)}
+    />
+
+    <!-- Filled at runtime by theme.ts to match the current background colour -->
+    <meta name="theme-color" content="" />
+
+    <!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->
+    <slot name="head" />
+
+    {
+      site.googleVerification && (
+        <meta
+          name="google-site-verification"
+          content={site.googleVerification}
+        />
+      )
+    }
+
+    <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        document.firstElementChild?.setAttribute("data-theme", theme);
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script>
+
+    <ClientRouter />
+
+    <script type="speculationrules">
+      {
+        "prefetch": [
+          {
+            "source": "document",
+            "where": {
+              "and": [{ "href_matches": "/*", "relative_to": "document" }]
+            },
+            "eagerness": "moderate"
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body
+    class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
+  >
+    <slot />
+    <script>
+      import "@/scripts/theme";
+
+      // Drive search-page init from the layout. Bundled module scripts run only
+      // once across view transitions, so a script living on `/search` itself
+      // never re-executes when arriving via client-side navigation. Registering
+      // here — on every page's first full load — keeps the listener on
+      // `document` across navigations, and the heavy search code is lazily
+      // imported only when the search page is actually present.
+      document.addEventListener("astro:page-load", () => {
+        if (document.querySelector("#search-page")) {
+          import("@/scripts/search").then(m => m.initSearch());
+        }
+      });
+    </script>
+  </body>
+</html>
