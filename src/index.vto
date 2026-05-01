@@ -1,39 +1,47 @@
 ---
 layout: layouts/base.vto
 title: Diffumist
-description: Diffumist's Lab
+description: Diffumist's Site
 ---
 <main>
   <section>
-    <h1 class="terminal-prompt">Link</h1>
-    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-      {{ for link of socialLinks }}
-      <a
-        href="{{ link.url }}"
-        class="btn btn-primary btn-ghost"
-        target="_blank"
-        rel="noopener noreferrer"
-        style="display: flex; align-items: center; gap: 1rem; text-align: left; justify-content: flex-start;"
-      >
-        {{ link.name }}
-      </a>
+    <h1 class="terminal-prompt">Posts</h1>
+    {{ set posts = search.pages("type=post") }}
+    {{ if posts && posts.length }}
+    {{
+      set orderedPosts = [...(posts ?? [])].sort((a, b) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      )
+    }}
+    <div class="terminal-timeline">
+      {{ for post of orderedPosts }}
+        {{
+          set postDate = (() => {
+            const dateObj = new Date(post.date ?? Date.now());
+            const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+            return `${dateObj.getFullYear()}-${month}`;
+          })();
+        }}
+        <article class="terminal-card">
+          <header>
+            <time datetime="{{ postDate }}">{{ postDate }}</time>
+            <span> / </span>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+          </header>
+          <div>
+            {{ if post.description }}
+              <p>{{ post.description }}</p>
+            {{ else if post.excerpt }}
+              <p>{{ post.excerpt }}</p>
+            {{ else }}
+              <p>No description.</p>
+            {{ /if }}
+          </div>
+        </article>
       {{ /for }}
     </div>
-  </section>
-  <section>
-    <h2 class="terminal-prompt">Self</h2>
-    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-      {{ for service of services }}
-      <a
-        href="{{ service.url }}"
-        class="btn btn-primary btn-ghost"
-        target="_blank"
-        rel="noopener noreferrer" 
-        style="display: flex; align-items: center; gap: 1rem; text-align: left; justify-content: flex-start;"
-      >
-        {{ service.name }}
-      </a>
-      {{ /for }}
-    </div>
+    {{ else }}
+    <p>None</p>
+    {{ /if }}
   </section>
 </main>

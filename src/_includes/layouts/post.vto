@@ -4,8 +4,31 @@ layout: layouts/base.vto
 <main>
   <section>
     <h1 class="terminal-prompt">{{ title }}</h1>
-    <div>
-      {{ content |> safe }}
+    {{
+      set postToc = [...String(content).matchAll(/<h([2-4]) id="([^"]+)">([\s\S]*?)<\/h\1>/g)]
+        .map((match) => ({
+          level: Number(match[1]),
+          id: match[2],
+          title: match[3].replace(/<[^>]*>/g, "").trim(),
+        }))
+        .filter((item) => item.title)
+    }}
+    <div class="post-layout">
+      <article class="post-content">
+        {{ content |> safe }}
+      </article>
+      {{ if postToc && postToc.length }}
+        <aside class="post-toc" aria-labelledby="post-toc-title">
+          <h2 id="post-toc-title">Contents</h2>
+          <ol>
+            {{ for item of postToc }}
+              <li class="post-toc-level-{{ item.level }}">
+                <a href="#{{ item.id }}">{{ item.title }}</a>
+              </li>
+            {{ /for }}
+          </ol>
+        </aside>
+      {{ /if }}
     </div>
   </section>
 </main>

@@ -11,7 +11,7 @@ const theme = {
 
 const site = {
   title: "Diffumist",
-  description: "Diffumist's Lab",
+  description: "Diffumist's Site",
   url: "https://diffumist.me",
   theme,
 };

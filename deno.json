@@ -1,9 +1,12 @@
 {
   "tasks": {
-    "dev": "deno run --config=deno.json -A https://deno.land/x/lume@v2.2.0/cli.ts -s",
-    "build": "deno run --config=deno.json -A https://deno.land/x/lume@v2.2.0/cli.ts"
+    "dev": "deno run --config=deno.json -A https://deno.land/x/lume@v3.2.4/cli.ts -s",
+    "build": "deno run --config=deno.json -A https://deno.land/x/lume@v3.2.4/cli.ts"
   },
   "imports": {
-    "lume/": "https://deno.land/x/lume@v2.2.0/"
+    "lume/": "https://deno.land/x/lume@v3.2.4/"
+  },
+  "compilerOptions": {
+    "lib": ["deno.ns", "dom", "dom.iterable", "esnext"]
   }
 }

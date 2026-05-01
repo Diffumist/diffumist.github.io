@@ -1,0 +1,55 @@
+---
+layout: layouts/base.vto
+title: Links
+description: Diffumist's Links
+permalink: /links/
+---
+<main>
+  <section>
+    <h1 class="terminal-prompt">Sociallinks</h1>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      {{ for link of socialLinks }}
+      <a
+        href="{{ link.url }}"
+        class="btn btn-primary btn-ghost"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="display: flex; align-items: center; gap: 1rem; text-align: left; justify-content: flex-start;"
+      >
+        {{ link.name }}
+      </a>
+      {{ /for }}
+    </div>
+  </section>
+  <section>
+    <h2 class="terminal-prompt">Services</h2>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      {{ for service of services }}
+      <a
+        href="{{ service.url }}"
+        class="btn btn-primary btn-ghost"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="display: flex; align-items: center; gap: 1rem; text-align: left; justify-content: flex-start;"
+      >
+        {{ service.name }}
+      </a>
+      {{ /for }}
+    </div>
+  </section><section>
+    <h2 class="terminal-prompt">Projects</h2>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      {{ for project of projects }}
+      <a
+        href="{{ project.url }}"
+        class="btn btn-primary btn-ghost"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="display: flex; align-items: center; gap: 1rem; text-align: left; justify-content: flex-start;"
+      >
+        {{ project.name }}
+      </a>
+      {{ /for }}
+    </div>
+  </section>
+</main>
