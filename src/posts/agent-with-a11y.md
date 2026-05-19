@@ -4,7 +4,7 @@ title: Agent with a11y
 type: post
 permalink: /posts/agent-with-a11y/
 description: 让自己写的 LLM Agent 通过 a11y 操作桌面应用：一次小规模尝试
-date: 2026-05-01
+date: 2026-04-30
 ---
 这个点子一开始是在 Twitter 上看到 alma 的作者 @yetone 看到的，对此我挺感兴趣的，于是我也尝试了一下，这篇文章只记录一个初步思路。
 
