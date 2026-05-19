@@ -146,7 +146,6 @@ site.use(purgecss({
     ],
     safelist: {
       standard: [
-        /^dud/,
         /^hljs/,
         /^post-toc-level-/,
         /^terminal-alert/,
@@ -177,8 +176,14 @@ site.copy("public/favicon.svg", "favicon.svg");
 site.copy("public/favicon.ico", "favicon.ico");
 site.copy("public/favicon-96x96.png", "favicon-96x96.png");
 site.copy("public/apple-touch-icon.png", "apple-touch-icon.png");
-site.copy("public/web-app-manifest-192x192.png", "web-app-manifest-192x192.png");
-site.copy("public/web-app-manifest-512x512.png", "web-app-manifest-512x512.png");
+site.copy(
+  "public/web-app-manifest-192x192.png",
+  "web-app-manifest-192x192.png",
+);
+site.copy(
+  "public/web-app-manifest-512x512.png",
+  "web-app-manifest-512x512.png",
+);
 
 export default site;
 

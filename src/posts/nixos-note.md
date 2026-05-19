@@ -40,4 +40,4 @@ nix run nixpkgs#nix-tree -- nixpkgs#hello
 
 也就是说：nixos-install 阶段不需要 disko，但磁盘 partlabel 和 layouts 向 disko 配置靠齐。
 
-也可以用 [@lantian](https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/) 的思路，在 alpine initramfs 下直接 dd disk raw，只是我懒得在安装后扩展分区了。
+也可以用 [@lantian](https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/) 的思路，在 alpine initramfs 下直接 dd disk raw。

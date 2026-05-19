@@ -3,7 +3,7 @@ layout: layouts/base.vto
 ---
 <main>
   <section>
-    <h1 class="terminal-prompt">{{ title }}</h1>
+    <h1 id="post-top" class="terminal-prompt">{{ title }}</h1>
     {{
       set postToc = [...String(content).matchAll(/<h([2-4]) id="([^"]+)">([\s\S]*?)<\/h\1>/g)]
         .map((match) => ({
@@ -14,21 +14,24 @@ layout: layouts/base.vto
         .filter((item) => item.title)
     }}
     <div class="post-layout">
-      <article class="post-content">
-        {{ content |> safe }}
-      </article>
       {{ if postToc && postToc.length }}
-        <aside class="post-toc" aria-labelledby="post-toc-title">
+        <nav class="post-toc" aria-labelledby="post-toc-title">
           <h2 id="post-toc-title">Contents</h2>
-          <ol>
+          <ol aria-labelledby="post-toc-title">
             {{ for item of postToc }}
               <li class="post-toc-level-{{ item.level }}">
                 <a href="#{{ item.id }}">{{ item.title }}</a>
               </li>
             {{ /for }}
           </ol>
-        </aside>
+        </nav>
       {{ /if }}
+      <article class="post-content">
+        {{ content |> safe }}
+      </article>
     </div>
+    {{ if postToc && postToc.length }}
+      <a class="back-to-top" href="#post-top" aria-label="Back to top" title="Back to top" aria-hidden="true">↑</a>
+    {{ /if }}
   </section>
 </main>
