@@ -1,5 +1,62 @@
 html {
   scroll-behavior: smooth;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+:root {
+  --scrollbar-size: 0.7rem;
+  --scrollbar-track: #252729;
+  --scrollbar-thumb: #a89c7a;
+  --scrollbar-thumb-hover: var(--primary-color);
+}
+
+@supports (color: color-mix(in srgb, white, black)) {
+  :root {
+    --scrollbar-track: color-mix(
+      in srgb,
+      var(--background-color) 88%,
+      var(--secondary-color)
+    );
+    --scrollbar-thumb: color-mix(
+      in srgb,
+      var(--primary-color) 52%,
+      var(--secondary-color)
+    );
+    --scrollbar-thumb-hover: color-mix(
+      in srgb,
+      var(--primary-color) 78%,
+      var(--font-color)
+    );
+  }
+}
+
+* {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border: 2px solid var(--background-color);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track);
 }
 
 .post-layout {
