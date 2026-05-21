@@ -1,10 +1,96 @@
+{{ set pageLang = lang ?? "zh" }}
+{{ set t = i18n[pageLang] ?? i18n.zh }}
+{{ set manualAlternates = translationLinks
+  ? Object.entries(translationLinks).map(([alternateLang, alternateUrl]) => ({
+    lang: alternateLang,
+    url: alternateUrl,
+  }))
+  : []
+}}
+{{ set redirectAlternates = (alternates && alternates.length ? alternates : manualAlternates)
+  .map((alternate) => [alternate.lang, alternate.url])
+}}
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{{ t.htmlLang }}">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="{{ description ?? site.description }}" />
   <title>{{ title ?? site.title }}</title>
+  {{ if redirectAlternates && redirectAlternates.length > 1 }}
+    <script>
+      (() => {
+        const storageKey = "diffumist:preferred-language";
+        const supportedLanguages = new Set(["zh", "en", "ja"]);
+        const alternates = new Map({{ JSON.stringify(redirectAlternates) |> safe }});
+        const currentUrl = new URL(window.location.href);
+
+        const normalizeLanguage = (value) => {
+          const language = value?.toLowerCase().split("-")[0];
+          return language && supportedLanguages.has(language) ? language : null;
+        };
+
+        const currentLanguage = normalizeLanguage(document.documentElement.lang) ?? "zh";
+
+        try {
+          document.addEventListener("click", (event) => {
+            const link = event.target?.closest?.("a[href]");
+            if (!link) {
+              return;
+            }
+
+            const nextUrl = new URL(link.href, currentUrl);
+            for (const [language, url] of alternates) {
+              if (new URL(url, currentUrl).href === nextUrl.href) {
+                sessionStorage.setItem(storageKey, language);
+                return;
+              }
+            }
+          }, { capture: true });
+
+          if (currentLanguage !== "zh") {
+            sessionStorage.setItem(storageKey, currentLanguage);
+            return;
+          }
+
+          const storedLanguage = normalizeLanguage(sessionStorage.getItem(storageKey));
+          const referrerUrl = document.referrer ? new URL(document.referrer) : null;
+          const referrerLanguage = referrerUrl && referrerUrl.origin === currentUrl.origin
+            ? normalizeLanguage(referrerUrl.pathname.split("/").find(Boolean))
+            : null;
+          const referrerAlternateUrl = referrerLanguage ? alternates.get(referrerLanguage) : null;
+          const cameFromStoredAlternate = referrerAlternateUrl && storedLanguage === referrerLanguage
+            ? new URL(referrerAlternateUrl, currentUrl).pathname === referrerUrl.pathname
+            : false;
+
+          if (cameFromStoredAlternate) {
+            sessionStorage.setItem(storageKey, currentLanguage);
+            return;
+          }
+
+          const browserLanguage = navigator.languages
+            .map(normalizeLanguage)
+            .find((language) => language === "en" || language === "ja") ?? "zh";
+          const preferredLanguage = storedLanguage ?? browserLanguage;
+          const targetUrl = alternates.get(preferredLanguage);
+
+          if (!storedLanguage) {
+            sessionStorage.setItem(storageKey, preferredLanguage);
+          }
+
+          if (!targetUrl || preferredLanguage === currentLanguage) {
+            return;
+          }
+
+          const nextUrl = new URL(targetUrl, currentUrl);
+          if (nextUrl.href !== currentUrl.href) {
+            window.location.replace(nextUrl.href);
+          }
+        } catch {
+          // Ignore storage restrictions or malformed alternate links.
+        }
+      })();
+    </script>
+  {{ /if }}
   <link rel="stylesheet" href="/vendor/terminal.css" />
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -16,8 +102,17 @@
     rel="alternate"
     type="application/rss+xml"
     title="{{ site.title }} RSS"
-    href="{{ site.url }}/feed.xml"
+    href="{{ site.url }}/feeds.xml"
   />
+  {{ if manualAlternates && manualAlternates.length && !(alternates && alternates.length) }}
+    {{ for alternate of manualAlternates }}
+      <link
+        rel="alternate"
+        hreflang="{{ alternate.lang }}"
+        href="{{ alternate.url.startsWith('http') ? alternate.url : `${site.url}${alternate.url}` }}"
+      />
+    {{ /for }}
+  {{ /if }}
   <style>
     :root {
       --background-color: {{ site.theme.background }};
@@ -43,9 +138,9 @@
       </header>
       <div class="terminal-menu main-menu">
         <ul>
-          <li><a href="/">Posts</a></li>
-          <li><a href="/links/">Links</a></li>
-          <li><a href="/about/">About</a></li>
+          <li><a href="/">{{ t.nav.posts }}</a></li>
+          <li><a href="/links/">{{ t.nav.links }}</a></li>
+          <li><a href="/about/">{{ t.nav.about }}</a></li>
         </ul>
       </div>
     </nav>

@@ -1,6 +1,7 @@
 import lume from "lume/mod.ts";
 import vento from "lume/plugins/vento.ts";
 import markdown from "lume/plugins/markdown.ts";
+import multilanguage from "lume/plugins/multilanguage.ts";
 import feed from "lume/plugins/feed.ts";
 import codeHighlight from "lume/plugins/code_highlight.ts";
 import metas from "lume/plugins/metas.ts";
@@ -21,6 +22,10 @@ const site = lume({
 
 site.use(vento());
 site.use(markdown());
+site.use(multilanguage({
+  languages: ["zh", "en", "ja"],
+  defaultLanguage: "zh",
+}));
 site.hooks.markdownIt((md) => {
   md.use(attrs);
 
@@ -121,7 +126,7 @@ site.use(seo({
 site.use(sitemap());
 site.use(feed({
   output: ["/feeds.xml", "/feeds.json"],
-  query: "type=post",
+  query: "type=post lang=zh",
   info: {
     title: "=site.title",
     description: "=site.description",

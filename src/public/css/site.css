@@ -9,6 +9,11 @@ html {
   --scrollbar-track: #252729;
   --scrollbar-thumb: #a89c7a;
   --scrollbar-thumb-hover: var(--primary-color);
+  --article-font-stack:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+    "Noto Sans CJK SC", "Noto Sans CJK JP", "Noto Sans SC", "Noto Sans JP",
+    "PingFang SC", "Hiragino Sans GB", "Hiragino Kaku Gothic ProN",
+    "Microsoft YaHei", sans-serif;
 }
 
 @supports (color: color-mix(in srgb, white, black)) {
@@ -64,7 +69,22 @@ html {
 }
 
 .post-content {
+  font-family: var(--article-font-stack);
+  line-height: 1.78;
   min-width: 0;
+}
+
+.post-content code,
+.post-content kbd,
+.post-content pre,
+.post-content samp {
+  font-family: var(--mono-font-stack);
+}
+
+.post-content b,
+.post-content strong {
+  font-family: inherit;
+  font-weight: 700;
 }
 
 .post-content ul > li::after {
@@ -77,10 +97,20 @@ html {
   counter-increment: none;
 }
 
-.post-content h2,
-.post-content h3,
-.post-content h4 {
+.post-content h2 {
+  line-height: 1.35;
   scroll-margin-top: calc(var(--global-space) * 2);
+  border-bottom: 1px solid var(--secondary-color);
+  color: var(--primary-color);
+  font-size: calc(var(--global-font-size) * 1.25);
+  font-weight: 600;
+  margin-top: calc(var(--global-space) * 4);
+  margin-bottom: calc(var(--global-space) * 1.5);
+  padding-bottom: 0.35em;
+}
+
+.post-content > h2:first-child {
+  margin-top: 0;
 }
 
 .post-toc {
@@ -99,6 +129,12 @@ html {
 .post-toc ol {
   margin-top: var(--global-space);
   margin-bottom: 0;
+  padding-left: 0;
+}
+
+.post-toc li::before {
+  content: none;
+  counter-increment: none;
 }
 
 .post-toc a {
@@ -113,9 +149,33 @@ html {
   margin-left: calc(var(--global-space) * 2);
 }
 
+.translation-note {
+  border-left: 1px solid var(--primary-color);
+  color: var(--secondary-color);
+  padding-left: var(--global-space);
+}
+
+.post-languages {
+  color: var(--secondary-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em 0.8em;
+  margin: 0 0 calc(var(--global-space) * 1.5);
+}
+
+.post-languages a {
+  color: inherit;
+}
+
+.post-languages a[aria-current="page"] {
+  color: var(--primary-color);
+  cursor: default;
+  text-decoration: none;
+}
+
 @media screen and (min-width: 76rem) {
   .post-layout {
-    --post-toc-width: 16rem;
+    --post-toc-width: 22rem;
     --post-toc-gap: calc(var(--global-space) * 3);
 
     display: grid;

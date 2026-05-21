@@ -5,8 +5,9 @@ description: Diffumist's Site
 ---
 <main>
   <section>
+    {{ set pageLang = lang ?? "zh" }}
     <h1 class="terminal-prompt">Posts</h1>
-    {{ set posts = search.pages("type=post") }}
+    {{ set posts = search.pages("type=post").filter((post) => (post.lang ?? "zh") === pageLang) }}
     {{ if posts && posts.length }}
     {{
       set orderedPosts = [...(posts ?? [])].sort((a, b) =>

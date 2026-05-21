@@ -3,7 +3,26 @@ layout: layouts/base.vto
 ---
 <main>
   <section>
+    {{ set pageLang = lang ?? "zh" }}
+    {{ set t = i18n[pageLang] ?? i18n.zh }}
+    {{ set postContentLang = contentLang ?? pageLang }}
+    {{ set postAlternates = alternates && alternates.length ? alternates : manualAlternates }}
     <h1 id="post-top" class="terminal-prompt">{{ title }}</h1>
+    {{ if postAlternates && postAlternates.length > 1 }}
+      <nav class="post-languages" aria-label="{{ t.post.languages }}">
+        {{ for alternate of postAlternates }}
+          {{ set alternateI18n = i18n[alternate.lang] ?? i18n.zh }}
+          <a
+            href="{{ alternate.url }}"
+            lang="{{ alternateI18n.htmlLang }}"
+            {{ if alternate.lang === pageLang }}aria-current="page"{{ /if }}
+          >{{ alternateI18n.languageName }}</a>
+        {{ /for }}
+      </nav>
+    {{ /if }}
+    {{ if pageLang !== postContentLang }}
+      <p class="translation-note">{{ t.post.translationNotice }}</p>
+    {{ /if }}
     {{
       set postToc = [...String(content).matchAll(/<h([2-4]) id="([^"]+)">([\s\S]*?)<\/h\1>/g)]
         .map((match) => ({
@@ -16,7 +35,7 @@ layout: layouts/base.vto
     <div class="post-layout">
       {{ if postToc && postToc.length }}
         <nav class="post-toc" aria-labelledby="post-toc-title">
-          <h2 id="post-toc-title">Contents</h2>
+          <h2 id="post-toc-title">{{ t.post.contents }}</h2>
           <ol aria-labelledby="post-toc-title">
             {{ for item of postToc }}
               <li class="post-toc-level-{{ item.level }}">
@@ -31,7 +50,7 @@ layout: layouts/base.vto
       </article>
     </div>
     {{ if postToc && postToc.length }}
-      <a class="back-to-top" href="#post-top" aria-label="Back to top" title="Back to top" aria-hidden="true">↑</a>
+      <a class="back-to-top" href="#post-top" aria-label="{{ t.post.backToTop }}" title="{{ t.post.backToTop }}" aria-hidden="true">↑</a>
     {{ /if }}
   </section>
 </main>
