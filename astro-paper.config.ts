@@ -52,7 +52,6 @@ export default defineAstroPaperConfig({
     { name: "attic", url: "https://attic.diffumist.me" },
     { name: "immich", url: "https://immich.diffumist.me" },
     { name: "rqbit", url: "https://rqbit.diffumist.me" },
-    { name: "hermes", url: "https://hermes.diffumist.me" },
     { name: "tldr", url: "https://tg.503418.xyz" },
     { name: "cyber", url: "https://cyber.503418.xyz" },
     { name: "traven", url: "https://tavern.diffumist.me" },
