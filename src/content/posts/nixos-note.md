@@ -1,7 +1,7 @@
 ---
-title: NixOS 使用笔记
+title: NixOS 使用记录
 pubDatetime: 2026-02-01
-description: 很长时间在使用 NixOS，这里留一些使用笔记，以后想起来再补充
+description: 很长时间在使用 NixOS，这里留一些使用记录，以后想起来再补充。
 tags: [nix, linux]
 ---
 
@@ -40,7 +40,7 @@ nom build nixpkgs#hello
 1. format、subvolume、mount、swapfile 仍由 alpine shell 手动完成。
 2. partlabel 改成兼容 disko 的结构，如：disk-main-boot / disk-main-nixos。
 
-也就是说：nixos-install 阶段不需要 disko，但磁盘 partlabel 和 layouts 向 disko 配置靠齐。
+换句话说：nixos-install 阶段不需要 disko，但磁盘 partlabel 和 layouts 向 disko 配置靠齐。
 
 也可以用 [@lantian](https://lantian.pub/article/modify-computer/nixos-low-ram-vps.lantian/) 的思路，在 alpine initramfs 下直接 dd disk raw。
 
@@ -82,6 +82,6 @@ reverse_proxy unix//tmp/myservice.sock
 
 ## 在低 RAM 机器（< 512MiB）上使用 CachyOS Server LTO Kernel 触发 OOM
 
-> cachyos-server-lto：services 异常，systemctl / journalctl 容易被 SIGKILL，出现 global OOM
-> 
-> xanmod：所有 services 正常运行
+cachyos-server-lto：services 异常，systemctl / journalctl 容易被 SIGKILL，出现 global OOM
+
+xanmod：所有 services 正常运行

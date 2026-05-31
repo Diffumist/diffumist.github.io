@@ -11,7 +11,7 @@ tags: [astro]
 
 Speed Brain 会推测式预渲染 `/search`，请求带 `Sec-Purpose: prefetch;prerender` 头，被 CF 回了 503，这个 503 会在浏览器预取缓存里反复复用，但直接打开 URL 是 200。
 
-这里关掉 Speed Brain，再 Purge 一次缓存即可解决。
+这里关掉 Speed Brain，再 Purge 缓存即可解决。
 
 ## ClientRouter 下 bundled 脚本不重跑
 
@@ -23,7 +23,7 @@ Speed Brain 会推测式预渲染 `/search`，请求带 `Sec-Purpose: prefetch;p
 
 启用 `<ClientRouter />` 后，带 `import` 的打包脚本在 SPA 导航时只执行一次、之后被忽略。注册 `astro:page-load` 的代码写在这个不执行的模块里，于是模块不跑 → 监听不注册 → 初始化永不触发，只有整页刷新能救。`data-astro-rerun` 无效，因为它只作用于 `is:inline` 脚本。
 
-解法：把初始化逻辑从页面模块移到 Layout，监听挂在 `document` 上跨导航持久，命中搜索页时再动态 `import()`，保留懒加载。
+解法：把初始化逻辑从页面模块移到 Layout，监听挂在 `document` 上跨导航持久，命中搜索页时再动态 `import()`，保留 Lazy loading。
 
 ```js
 document.addEventListener("astro:page-load", () => {
@@ -35,9 +35,9 @@ document.addEventListener("astro:page-load", () => {
 
 ## Cloudflare Rocket Loader 改写脚本
 
-搜索修好后，又发现新症状：文章顶部进度条、back-to-top、代码块的 copy 按钮、heading 锚点链接，全都只有刷新才出现，SPA 跳转后消失。它们本来都用了 `is:inline data-astro-rerun`，本地 `yarn preview` 一切正常，只有线上失效。
+搜索修好后，又发现了新问题：顶部进度条、back-to-top、代码块 copy 按钮、heading 锚点链接，全都只有刷新才出现，SPA 跳转后消失。它们本来都用了 `is:inline data-astro-rerun`，本地 `yarn preview` 一切正常，只有线上失效。
 
-对比线上 HTML 发现脚本被改写过：
+对比线上 HTML 发现脚本被改写了：
 
 ```html
 <!-- 本地 -->
@@ -46,9 +46,9 @@ document.addEventListener("astro:page-load", () => {
 <script data-astro-rerun type="7fc8c514c2f7e1fcc3691c38-text/javascript">…</script>
 ```
 
-这是 Cloudflare Rocket Loader 的手脚：它把行内脚本的 `type` 改成浏览器不识别的值，改由自己的 `rocket-loader.min.js` 统一执行，但只在首屏整页加载时处理一次，ClientRouter 后续 swap 进来的脚本它不管了，然后带着非法 `type` 进了 DOM。（`type="module"` 的外链脚本它会跳过，所以上面 MiniSearch 那个坑是另一回事。）
+这是 Cloudflare Rocket Loader 的手脚：它把行内脚本的 `type` 改成浏览器不识别的值，改成自己的 `rocket-loader.min.js` 统一执行，但只在整页加载时处理一次，ClientRouter 后续 swap 进来的脚本它不管了，然后带着非法 `type` 进了 DOM。（`type="module"` 的外链脚本它会跳过，所以上面 MiniSearch 那个坑是另一回事。）
 
-这里还是如法炮制关掉 Rocket Loader，Purge 缓存即可，要保留的话需要给脚本加 `data-cfasync="false"` 让它跳过。
+这里还是如法炮制关掉 Rocket Loader，Purge 缓存即可。
 
 ## 总结
 

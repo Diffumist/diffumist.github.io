@@ -1,28 +1,43 @@
 const THEME_KEY = "theme";
 const LIGHT = "light";
 const DARK = "dark";
+const AUTO = "auto";
+// Click cycles through these in order.
+const ORDER = [AUTO, LIGHT, DARK];
 
-function getPreferredTheme(): string {
+const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+function isPref(value: string | null): value is string {
+  return value === LIGHT || value === DARK || value === AUTO;
+}
+
+function getStoredPref(): string {
   const stored = localStorage.getItem(THEME_KEY);
-  if (stored) return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? DARK
-    : LIGHT;
+  return isPref(stored) ? stored : AUTO;
+}
+
+/** Resolve a preference to the concrete theme applied via `data-theme`. */
+function resolve(value: string): string {
+  if (value === AUTO) return media.matches ? DARK : LIGHT;
+  return value;
 }
 
 // Reuse the value already set by the inline FOUC-prevention script if available.
-let themeValue: string =
-  (window as unknown as { __theme?: { value: string } }).__theme?.value ??
-  getPreferredTheme();
+let pref: string =
+  (window as unknown as { __theme?: { pref?: string } }).__theme?.pref ??
+  getStoredPref();
 
 function persist(): void {
-  localStorage.setItem(THEME_KEY, themeValue);
+  localStorage.setItem(THEME_KEY, pref);
   reflect();
 }
 
 function reflect(): void {
-  document.firstElementChild?.setAttribute("data-theme", themeValue);
-  document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
+  const root = document.firstElementChild;
+  root?.setAttribute("data-theme", resolve(pref));
+  // Drives which icon the theme button shows (see the `pref-*` variants).
+  root?.setAttribute("data-theme-pref", pref);
+  document.querySelector("#theme-btn")?.setAttribute("aria-label", pref);
 
   // Fill <meta name="theme-color"> with the computed background colour so
   // Android's browser chrome matches the page background.
@@ -35,7 +50,7 @@ function reflect(): void {
 function setup(): void {
   reflect();
   document.querySelector("#theme-btn")?.addEventListener("click", () => {
-    themeValue = themeValue === LIGHT ? DARK : LIGHT;
+    pref = ORDER[(ORDER.indexOf(pref) + 1) % ORDER.length];
     persist();
   });
 }
@@ -58,10 +73,8 @@ document.addEventListener("astro:before-swap", event => {
   }
 });
 
-// Sync with OS-level dark/light preference changes.
-window
-  .matchMedia("(prefers-color-scheme: dark)")
-  .addEventListener("change", ({ matches }) => {
-    themeValue = matches ? DARK : LIGHT;
-    persist();
-  });
+// Follow OS-level dark/light changes only while in "auto" mode; an explicit
+// light/dark choice is left untouched.
+media.addEventListener("change", () => {
+  if (pref === AUTO) reflect();
+});

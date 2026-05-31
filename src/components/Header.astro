@@ -6,7 +6,7 @@ import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
-import IconRss from "@/assets/icons/IconRss.svg";
+import IconAutoTheme from "@/assets/icons/IconAutoTheme.svg";
 import IconTag from "@/assets/icons/IconTag.svg";
 import IconX from "@/assets/icons/IconX.svg";
 import LinkButton from "./LinkButton.astro";
@@ -52,7 +52,7 @@ const isActive = (path: string) => {
   >
     <a
       href={getRelativeLocaleUrl(locale, "")}
-      class="absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
+      class="text-accent absolute py-1 text-xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
     >
       {site.title}
     </a>
@@ -145,17 +145,6 @@ const isActive = (path: string) => {
             </li>
           )
         }
-        <li class="col-span-1 flex items-center justify-center">
-          <LinkButton
-            href={`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`}
-            class:list={["focus-outline relative size-8"]}
-            title="RSS Feed"
-            aria-label="RSS Feed"
-          >
-            <IconRss class="absolute top-1/2 left-1/2 size-6 -translate-x-1/2 -translate-y-1/2 stroke-2" />
-            <span class="sr-only">RSS Feed</span>
-          </LinkButton>
-        </li>
         {
           features.lightAndDarkMode && (
             <li class="col-span-1 flex items-center justify-center">
@@ -166,8 +155,9 @@ const isActive = (path: string) => {
                 aria-label="auto"
                 aria-live="polite"
               >
-                <IconMoon class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                <IconSunHigh class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                <IconSunHigh class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all pref-light:scale-100 pref-light:rotate-0" />
+                <IconMoon class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 -rotate-90 transition-all pref-dark:scale-100 pref-dark:rotate-0" />
+                <IconAutoTheme class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 transition-all pref-auto:scale-100" />
               </button>
             </li>
           )

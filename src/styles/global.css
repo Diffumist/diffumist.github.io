@@ -4,15 +4,47 @@
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
+/* Theme-button icon state: tracks the chosen preference (light / dark / auto),
+   independent of the resolved `data-theme`. */
+@custom-variant pref-light (&:where([data-theme-pref=light], [data-theme-pref=light] *));
+@custom-variant pref-dark (&:where([data-theme-pref=dark], [data-theme-pref=dark] *));
+@custom-variant pref-auto (&:where([data-theme-pref=auto], [data-theme-pref=auto] *));
+
 @layer base {
   * {
-    @apply border-border outline-accent/75;
-    scrollbar-width: auto;
-    scrollbar-color: var(--color-muted) transparent;
+    @apply border-border outline-ring/70;
+    /* Firefox: slim scrollbar, thumb = foreground/20 over an invisible track. */
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 20%, transparent)
+      transparent;
+  }
+
+  /* WebKit/Blink: mirror the Coss ScrollArea look — a ~6px pill thumb
+     (foreground/20, inset via a transparent border) over an invisible track,
+     for both vertical and horizontal scrollbars. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: color-mix(in oklab, var(--foreground) 20%, transparent);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklab, var(--foreground) 35%, transparent);
+  }
+  ::-webkit-scrollbar-button {
+    display: none;
   }
   a,
   button {
-    @apply outline-accent outline-offset-1 focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-dashed;
+    @apply outline-ring outline-offset-1 focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-dashed;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {

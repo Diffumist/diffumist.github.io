@@ -97,13 +97,20 @@ const rssHref = getRelativeLocaleUrl(
     <script is:inline>
       (function () {
         const stored = localStorage.getItem("theme");
+        const pref =
+          stored === "light" || stored === "dark" || stored === "auto"
+            ? stored
+            : "auto";
         const prefersDark = window.matchMedia(
           "(prefers-color-scheme: dark)"
         ).matches;
-        const theme = stored ?? (prefersDark ? "dark" : "light");
-        document.firstElementChild?.setAttribute("data-theme", theme);
-        // Expose value so theme.ts can skip re-detection.
-        window.__theme = { value: theme };
+        const theme =
+          pref === "auto" ? (prefersDark ? "dark" : "light") : pref;
+        const root = document.firstElementChild;
+        root?.setAttribute("data-theme", theme);
+        root?.setAttribute("data-theme-pref", pref);
+        // Expose values so theme.ts can skip re-detection.
+        window.__theme = { value: theme, pref: pref };
       })();
     </script>
 

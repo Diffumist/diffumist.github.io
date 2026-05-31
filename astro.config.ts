@@ -36,7 +36,7 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [remarkToc, [remarkCollapse, { test: "Table of contents" }]],
     shikiConfig: {
-      themes: { light: "min-light", dark: "night-owl" },
+      themes: { light: "min-light", dark: "material-theme-darker" },
       defaultColor: false,
       wrap: false,
       transformers: [
