@@ -32,12 +32,13 @@ export default defineAstroPaperConfig({
     { name: "mail", url: "mailto:pm@diffumist.me" },
     { name: "telegram", url: "https://t.me/Diffumist" },
     { name: "github", url: "https://github.com/Diffumist" },
+    { name: "mastodon", url: "https://diffumist.me/fedi" },
     { name: "netease", url: "https://music.163.com/#/user?id=1732544203" },
-    { name: "steam", url: "https://steamcommunity.com/id/diffumist" },
   ],
   services: [
-    { name: "Node SLA", url: "https://sla.qzz.io" },
+    { name: "DN42 Peer", url: "https://t.me/AS4242420642" },
     { name: "Pastebin", url: "https://nixos.bond" },
+    { name: "Node SLA", url: "https://sla.qzz.io" },
   ],
   projects: [
     { name: "nixos-config", url: "https://github.com/Diffumist/nixos-config" },
