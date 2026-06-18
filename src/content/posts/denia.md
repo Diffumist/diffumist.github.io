@@ -2,7 +2,7 @@
 title: 反工具化角色被处理成工具：叙事的自我证伪
 pubDatetime: 2026-05-28
 description: 这是一份达妮娅角色线叙事解构的个人记录，用于记录我对其呈现效果的不适，文本仅作归档。
-tags: [games]
+tags: [thinking]
 ---
 > 文本经过 Claude Opus 4.6 润色。
 

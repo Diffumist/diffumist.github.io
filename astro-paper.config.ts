@@ -32,7 +32,6 @@ export default defineAstroPaperConfig({
     { name: "mail", url: "mailto:pm@diffumist.me" },
     { name: "telegram", url: "https://t.me/Diffumist" },
     { name: "github", url: "https://github.com/Diffumist" },
-    { name: "mastodon", url: "https://diffumist.me/fedi" },
     { name: "netease", url: "https://music.163.com/#/user?id=1732544203" },
   ],
   services: [
@@ -48,6 +47,7 @@ export default defineAstroPaperConfig({
   ],
   privateServices: [
     { name: "auth", url: "https://auth.diffumist.me" },
+    { name: "fedi", url: "https://diffumist.me/fedi" },
     { name: "ldap", url: "https://ldap.diffumist.me" },
     { name: "vault", url: "https://vault.diffumist.me" },
     { name: "attic", url: "https://attic.diffumist.me" },
