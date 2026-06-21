@@ -35,7 +35,7 @@ export default defineAstroPaperConfig({
     { name: "netease", url: "https://music.163.com/#/user?id=1732544203" },
   ],
   services: [
-    { name: "DN42 Peer", url: "https://t.me/AS4242420642" },
+    { name: "DN42 Info", url: "https://t.me/AS4242420642" },
     { name: "Pastebin", url: "https://nixos.bond" },
     { name: "Node SLA", url: "https://sla.qzz.io" },
   ],
@@ -46,16 +46,7 @@ export default defineAstroPaperConfig({
     { name: "sing-box-mcp", url: "https://github.com/Diffumist/sing-box-mcp" },
   ],
   privateServices: [
-    { name: "auth", url: "https://auth.diffumist.me" },
-    { name: "fedi", url: "https://diffumist.me/fedi" },
-    { name: "ldap", url: "https://ldap.diffumist.me" },
-    { name: "vault", url: "https://vault.diffumist.me" },
-    { name: "attic", url: "https://attic.diffumist.me" },
-    { name: "immich", url: "https://immich.diffumist.me" },
-    { name: "rqbit", url: "https://rqbit.diffumist.me" },
-    { name: "tldr", url: "https://tg.503418.xyz" },
-    { name: "cyber", url: "https://cyber.503418.xyz" },
-    { name: "traven", url: "https://tavern.diffumist.me" },
+    { name: "Fediverse", url: "https://diffumist.me/fedi" },
   ],
   shareLinks: [
     { name: "telegram", url: "https://t.me/share/url?url=" },
