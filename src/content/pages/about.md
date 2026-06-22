@@ -12,7 +12,3 @@ description: About
 我对纯粹情感有偏好。
 
 真实的东西对我重要。
-
-## Favorite tags
-
-`NixOS` `Golang` `Rust` `Selfhosted` `Vocaloid-adjacent`
